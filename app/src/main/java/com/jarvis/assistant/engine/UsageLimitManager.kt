@@ -70,6 +70,6 @@ class UsageLimitManager(
         val h = seconds / 3600
         val m = (seconds % 3600) / 60
         val s = seconds % 60
-        return if (h > 0) f"{h}h {m}m {s}s" else f"{m}m {s}s"
+        return if (h > 0) "${h}h ${m}m ${s}s" else "${m}m ${s}s"
     }
 }
