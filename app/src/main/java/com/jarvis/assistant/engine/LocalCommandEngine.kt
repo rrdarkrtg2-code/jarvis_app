@@ -4,9 +4,9 @@ class LocalCommandEngine {
 
     fun parseCommand(rawText: String): CommandPattern? {
         val text = rawText.lowercase().trim()
-            .replace(Regex("^(hey\s+)?jarvis[,\s]*"), "")
-            .replace(Regex("^(hey\s+)?maya[,\s]*"), "")
-            .replace(Regex("^wake up (jarvis|maya)[,\s]*"), "")
+            .replace(Regex("^(hey\\s+)?jarvis[,\\s]*"), "")
+            .replace(Regex("^(hey\\s+)?maya[,\\s]*"), "")
+            .replace(Regex("^wake up (jarvis|maya)[,\\s]*"), "")
             .trim()
 
         return when {
@@ -37,11 +37,11 @@ class LocalCommandEngine {
                 CommandPattern.AccessibilityAction("see_screen")
             }
             text.startsWith("tap ") || text.startsWith("click ") || text.startsWith("press ") || text.startsWith("touch ") -> {
-                val target = text.replace(Regex("^(tap|click|press|touch)( on| the button that says| the button| the)?\s+"), "").trim()
+                val target = text.replace(Regex("^(tap|click|press|touch)( on| the button that says| the button| the)?\\s+"), "").trim()
                 CommandPattern.AccessibilityAction("tap_text", target)
             }
             text.startsWith("type ") || text.startsWith("write ") -> {
-                val toType = text.replace(Regex("^(type|write)\s+"), "").trim()
+                val toType = text.replace(Regex("^(type|write)\\s+"), "").trim()
                 CommandPattern.AccessibilityAction("type_text", toType)
             }
             text == "scroll down" || text.contains("scroll niche") -> CommandPattern.AccessibilityAction("scroll_down")
@@ -95,11 +95,11 @@ class LocalCommandEngine {
 
             // 9. App launching
             text.startsWith("open ") || text.startsWith("launch ") || text.startsWith("start ") -> {
-                val appName = text.replace(Regex("^(open|launch|start)\s+"), "").trim()
+                val appName = text.replace(Regex("^(open|launch|start)\\s+"), "").trim()
                 if (appName.isNotEmpty()) CommandPattern.OpenApp(appName) else null
             }
             text.endsWith(" kholo") || text.endsWith(" open karo") -> {
-                val appName = text.replace(Regex("\s+(kholo|open karo)$"), "").trim()
+                val appName = text.replace(Regex("\\s+(kholo|open karo)$"), "").trim()
                 if (appName.isNotEmpty()) CommandPattern.OpenApp(appName) else null
             }
 
@@ -115,7 +115,7 @@ class LocalCommandEngine {
 
             // 11. Web search
             text.startsWith("search the web for ") || text.startsWith("search web for ") || text.startsWith("google ") -> {
-                val query = text.replace(Regex("^(search the web for|search web for|google)\s+"), "").trim()
+                val query = text.replace(Regex("^(search the web for|search web for|google)\\s+"), "").trim()
                 CommandPattern.SearchWeb(query)
             }
 

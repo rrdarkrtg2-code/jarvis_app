@@ -218,7 +218,7 @@ fun HomeScreen(
                     Spacer(modifier = Modifier.height(14.dp))
                     WaveformVisualizer(
                         audioLevel = state.audioLevel,
-                        isSpeaking = true,
+                        isActive = true,
                         modifier = Modifier.fillMaxWidth().height(40.dp)
                     )
                     Spacer(modifier = Modifier.height(10.dp))
@@ -253,7 +253,7 @@ fun HomeScreen(
                     Spacer(modifier = Modifier.height(14.dp))
                     WaveformVisualizer(
                         audioLevel = state.audioLevel,
-                        isSpeaking = false,
+                        isActive = true,
                         modifier = Modifier.fillMaxWidth().height(40.dp)
                     )
                     Spacer(modifier = Modifier.height(10.dp))
