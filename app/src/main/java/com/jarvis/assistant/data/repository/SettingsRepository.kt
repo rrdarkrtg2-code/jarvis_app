@@ -33,6 +33,15 @@ class SettingsRepository(private val preferenceDao: PreferenceDao) {
         return getString(key, defaultValue.toString()).toFloatOrNull() ?: defaultValue
     }
 
+    
+    suspend fun setLong(key: String, value: Long) {
+        setString(key, value.toString())
+    }
+
+    suspend fun getLong(key: String, defaultValue: Long = 0L): Long {
+        return getString(key, defaultValue.toString()).toLongOrNull() ?: defaultValue
+    }
+
     suspend fun clearAll() {
         preferenceDao.clearAll()
     }
