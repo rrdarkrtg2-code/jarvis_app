@@ -20,8 +20,7 @@ class TtsManager(
     init {
         tts = TextToSpeech(context) { status ->
             if (status == TextToSpeech.SUCCESS) {
-                // Configure default British J.A.R.V.I.S. voice
-                setupJarvisVoice()
+                setupMayaVoice()
 
                 tts?.setOnUtteranceProgressListener(object : UtteranceProgressListener() {
                     override fun onStart(utteranceId: String?) {
@@ -43,41 +42,47 @@ class TtsManager(
         }
     }
 
-    private fun setupJarvisVoice() {
+    private fun setupMayaVoice() {
         val engine = tts ?: return
 
-        // 1. Set locale to Great Britain for authentic British accent
-        engine.language = Locale.UK
+        // 1. Prioritize Indian English (Maya style) or standard English
+        val indianLocale = Locale("en", "IN")
+        val availableLangs = engine.availableLanguages
+        if (availableLangs != null && availableLangs.contains(indianLocale)) {
+            engine.language = indianLocale
+        } else {
+            engine.language = Locale.ENGLISH
+        }
 
-        // 2. Set calm, deep, steady J.A.R.V.I.S. pitch and rate
-        engine.setPitch(0.88f)      // Slightly lower pitch for Paul Bettany tone
-        engine.setSpeechRate(0.96f)  // Composed, articulate pacing
+        // 2. Set calm, friendly, natural female AI voice pitch & speed
+        engine.setPitch(1.10f)       // Natural, clear feminine pitch (Maya / Siri tone)
+        engine.setSpeechRate(1.02f)   // Smooth, fluent speech rate
 
-        // 3. Scan available system voices for British male profiles
+        // 3. Scan system voices for high-quality female profiles
         try {
             val voices = engine.voices
             if (!voices.isNullOrEmpty()) {
-                val preferredJarvisVoice = voices.firstOrNull { v ->
-                    v.locale.language == "en" &&
-                    (v.locale.country == "GB" || v.locale.country == "UK") &&
-                    (v.name.contains("male", ignoreCase = true) ||
-                     v.name.contains("rjs", ignoreCase = true) ||
-                     v.name.contains("gbd", ignoreCase = true) ||
-                     v.name.contains("fis", ignoreCase = true))
+                val femaleVoice = voices.firstOrNull { v ->
+                    (v.locale.country == "IN" || v.locale.language == "en") &&
+                    (v.name.contains("female", ignoreCase = true) ||
+                     v.name.contains("cxx", ignoreCase = true) ||
+                     v.name.contains("ahp", ignoreCase = true) ||
+                     v.name.contains("enc", ignoreCase = true) ||
+                     v.name.contains("sfg", ignoreCase = true) ||
+                     v.name.contains("zira", ignoreCase = true) ||
+                     v.name.contains("woman", ignoreCase = true))
                 } ?: voices.firstOrNull {
-                    it.locale.language == "en" &&
-                    (it.locale.country == "GB" || it.locale.country == "UK") &&
-                    !it.isNetworkConnectionRequired
+                    it.locale.country == "IN" && !it.isNetworkConnectionRequired
                 }
 
-                if (preferredJarvisVoice != null) {
-                    engine.voice = preferredJarvisVoice
+                if (femaleVoice != null) {
+                    engine.voice = femaleVoice
                 }
             }
         } catch (ignored: Exception) {}
     }
 
-    fun speak(text: String, speechRate: Float = 0.96f, pitch: Float = 0.88f) {
+    fun speak(text: String, speechRate: Float = 1.02f, pitch: Float = 1.10f) {
         lastSpokenText = text
         tts?.setSpeechRate(speechRate)
         tts?.setPitch(pitch)
@@ -91,7 +96,7 @@ class TtsManager(
         isSpeaking = false
     }
 
-    fun replay(speechRate: Float = 0.96f, pitch: Float = 0.88f) {
+    fun replay(speechRate: Float = 1.02f, pitch: Float = 1.10f) {
         if (lastSpokenText.isNotEmpty()) {
             speak(lastSpokenText, speechRate, pitch)
         }

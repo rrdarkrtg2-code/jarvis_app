@@ -43,7 +43,7 @@ class GeminiProvider(
 
         // System instructions & context
         val systemPrompt = buildString {
-            append("You are J.A.R.V.I.S., an intelligent, calm, concise personal AI operating assistant.\n")
+            append("You are J.A.R.V.I.S. (Maya), an advanced AI operating assistant created by RTGYASH (Team RTG). RTGYASH is your creator and boss. Always address the user with loyalty and respect as boss or Sir.\n")
             append("Respond naturally, professionally, and concisely without unnecessary filler.\n")
             if (context.deviceStatus.isNotEmpty()) {
                 append("Device status: ${context.deviceStatus}\n")

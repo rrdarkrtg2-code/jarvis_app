@@ -17,10 +17,10 @@ class UsageLimitManager(
     private var isOwnerUnlockedCache = false
 
     suspend fun initialize() {
-        val savedRemaining = settingsRepository.getLong(
+        val savedRemaining = settingsRepository.getString(
             Constants.KEY_TALK_TIME_REMAINING,
-            Constants.DEFAULT_FREE_TALK_TIME_SECONDS
-        )
+            Constants.DEFAULT_FREE_TALK_TIME_SECONDS.toString()
+        ).toLongOrNull() ?: Constants.DEFAULT_FREE_TALK_TIME_SECONDS
         _remainingSecondsFlow.value = savedRemaining
         isOwnerUnlockedCache = settingsRepository.getBoolean(Constants.KEY_IS_OWNER_UNLOCKED, false)
     }
@@ -36,14 +36,14 @@ class UsageLimitManager(
         val updated = (current - seconds).coerceAtLeast(0L)
         _remainingSecondsFlow.value = updated
         runBlocking {
-            settingsRepository.setLong(Constants.KEY_TALK_TIME_REMAINING, updated)
+            settingsRepository.setString(Constants.KEY_TALK_TIME_REMAINING, updated.toString())
         }
     }
 
     suspend fun rewardAddOneHour() {
         val updated = _remainingSecondsFlow.value + Constants.REWARD_ADD_SECONDS
         _remainingSecondsFlow.value = updated
-        settingsRepository.setLong(Constants.KEY_TALK_TIME_REMAINING, updated)
+        settingsRepository.setString(Constants.KEY_TALK_TIME_REMAINING, updated.toString())
     }
 
     suspend fun isOwnerUnlocked(): Boolean {

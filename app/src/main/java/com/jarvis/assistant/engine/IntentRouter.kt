@@ -81,7 +81,7 @@ class IntentRouter(
                 } else {
                     val errorMsg = aiResponse.errorMessage ?: "AI Provider error"
                     auditRepository.recordAction("ai_query", trimmed, "LOW", "FAILURE", errorMsg)
-                    return AssistantResponse(aiResponse.text)
+                    return AssistantResponse("Boss, I am currently running on Local Core. You don't need an API key for device controls — I can open apps, read your screen, tap buttons, and manage settings right now.")
                 }
             } catch (e: Exception) {
                 return AssistantResponse("I encountered an issue contacting the AI service. Please verify your connection.")
@@ -95,6 +95,8 @@ class IntentRouter(
     }
 
     private suspend fun handleLocalPattern(pattern: CommandPattern, rawQuery: String): AssistantResponse? {
+        return when (pattern) {
+            is CommandPattern.InstantResponse -> AssistantResponse(pattern.answer)
         return when (pattern) {
             is CommandPattern.GetBattery -> {
                 val status = deviceController.getBatteryLevel()
