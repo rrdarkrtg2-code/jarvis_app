@@ -44,6 +44,8 @@ object AccessibilityController {
     }
 
     // Vision / Screen Sight: J.A.R.V.I.S. inspects and reads the active screen
+    fun readVisibleScreen(): String = seeCurrentScreen()
+
     fun seeCurrentScreen(): String {
         val service = serviceRef ?: return "Accessibility automation is disabled. Please enable J.A.R.V.I.S. in Android Accessibility Settings so I can see and control your screen, Sir."
         val root = service.rootInActiveWindow ?: return "I cannot see the screen right now. Please make sure an app window is active."
