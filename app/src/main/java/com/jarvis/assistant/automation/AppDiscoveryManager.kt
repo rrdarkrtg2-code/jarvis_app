@@ -12,10 +12,13 @@ data class InstalledApp(
 
 class AppDiscoveryManager(private val context: Context) {
 
+    private val aliases = mapOf("yt" to "youtube", "insta" to "instagram", "ig" to "instagram", "wa" to "whatsapp", "fb" to "facebook", "calc" to "calculator")
+
     fun findAndLaunchApp(appName: String): AppLaunchResult {
         val pm = context.packageManager
         val apps = pm.getInstalledApplications(PackageManager.GET_META_DATA)
-        val query = appName.lowercase().trim()
+        val normalized = appName.lowercase().trim()
+        val query = aliases[normalized] ?: normalized
 
         val matchingApps = mutableListOf<InstalledApp>()
 

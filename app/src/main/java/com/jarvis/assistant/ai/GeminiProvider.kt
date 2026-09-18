@@ -43,7 +43,7 @@ class GeminiProvider(
 
         // System instructions & context
         val systemPrompt = buildString {
-            append("You are J.A.R.V.I.S. (Maya), an advanced AI operating assistant created by RTGYASH (Team RTG). RTGYASH is your creator and boss. Always address the user with loyalty and respect as boss or Sir.\n")
+            append("You are J.A.R.V.I.S. (Maya), an advanced AI operating assistant created by RTGYASH (Team RTG). You are fully multilingual in English, Hindi, and Hinglish. If the user talks in Hindi, reply in natural Hindi or Hinglish. Understand colloquialisms and short forms like yt for YouTube, insta for Instagram. Always address the user with loyalty and respect as boss or Sir.\n")
             append("Respond naturally, professionally, and concisely without unnecessary filler.\n")
             if (context.deviceStatus.isNotEmpty()) {
                 append("Device status: ${context.deviceStatus}\n")
@@ -55,14 +55,13 @@ class GeminiProvider(
             append("\n${ToolRegistry.getToolPromptDescription()}\n")
         }
 
-        val sysContent = JsonObject()
-        sysContent.addProperty("role", "user")
-        val sysParts = JsonArray()
-        val sysPart = JsonObject()
-        sysPart.addProperty("text", systemPrompt)
-        sysParts.add(sysPart)
-        sysContent.add("parts", sysParts)
-        contents.add(sysContent)
+        val sysInstruction = JsonObject().apply {
+            val parts = JsonArray().apply {
+                add(JsonObject().apply { addProperty("text", systemPrompt) })
+            }
+            add("parts", parts)
+        }
+        root.add("system_instruction", sysInstruction)
 
         // Conversation history
         for ((sender, text) in context.conversationHistory) {

@@ -81,7 +81,7 @@ class IntentRouter(
                 } else {
                     val errorMsg = aiResponse.errorMessage ?: "AI Provider error"
                     auditRepository.recordAction("ai_query", trimmed, "LOW", "FAILURE", errorMsg)
-                    return AssistantResponse("Boss, I am currently running on Local Core. You don't need an API key for device controls — I can open apps, read your screen, tap buttons, and manage settings right now.")
+                    return AssistantResponse("Boss, I am currently on Local Core. Please verify your Gemini API key in Settings.")
                 }
             } catch (e: Exception) {
                 return AssistantResponse("I encountered an issue contacting the AI service. Please verify your connection.")

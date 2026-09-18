@@ -30,7 +30,7 @@ class JarvisBackgroundService : Service() {
     override fun onCreate() {
         super.onCreate()
         startForegroundServiceNotification()
-        startBackgroundWakeWordDetection()
+        // Wake word runs on-demand to eliminate mic chime
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -83,7 +83,7 @@ class JarvisBackgroundService : Service() {
         startForeground(Constants.SERVICE_NOTIFICATION_ID, notification)
     }
 
-    private fun startBackgroundWakeWordDetection() {
+    private fun // Wake word runs on-demand to eliminate mic chime {
         if (!SpeechRecognizer.isRecognitionAvailable(this)) return
         isListeningLoopActive = true
         setupRecognizer()
