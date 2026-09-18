@@ -1,10 +1,23 @@
 package com.jarvis.assistant.voice
 
 import android.content.Context
+import android.media.MediaPlayer
 import android.speech.tts.TextToSpeech
 import android.speech.tts.UtteranceProgressListener
-import android.speech.tts.Voice
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.RequestBody.Companion.toRequestBody
+import org.json.JSONObject
+import java.io.File
+import java.io.FileOutputStream
 import java.util.Locale
+import java.util.concurrent.TimeUnit
 
 class TtsManager(
     private val context: Context,
@@ -12,10 +25,23 @@ class TtsManager(
     private val onSpeechDone: () -> Unit = {}
 ) {
     private var tts: TextToSpeech? = null
+    private var mediaPlayer: MediaPlayer? = null
+    private val scope = CoroutineScope(Dispatchers.Main + Job())
+
     var isSpeaking: Boolean = false
         private set
 
     private var lastSpokenText: String = ""
+
+    // Fish Audio API Configuration
+    var fishAudioApiKey: String = "sk-fish-g5_HthiFvRnFfVPLBsGho9UWh87Hbignt6gU-87mGMc"
+    // High-tech robotic AI Assistant female voice model on Fish Audio
+    var fishAudioVoiceId: String = "439895c3270543439da5da1532a5d21b"
+
+    private val httpClient = OkHttpClient.Builder()
+        .connectTimeout(15, TimeUnit.SECONDS)
+        .readTimeout(30, TimeUnit.SECONDS)
+        .build()
 
     init {
         tts = TextToSpeech(context) { status ->
@@ -45,7 +71,6 @@ class TtsManager(
     private fun setupMayaVoice() {
         val engine = tts ?: return
 
-        // 1. Prioritize Indian English (Maya style) or standard English
         val indianLocale = Locale("en", "IN")
         val availableLangs = engine.availableLanguages
         if (availableLangs != null && availableLangs.contains(indianLocale)) {
@@ -54,11 +79,9 @@ class TtsManager(
             engine.language = Locale.ENGLISH
         }
 
-        // 2. Set calm, friendly, natural female AI voice pitch & speed
-        engine.setPitch(1.10f)       // Natural, clear feminine pitch (Maya / Siri tone)
-        engine.setSpeechRate(1.02f)   // Smooth, fluent speech rate
+        engine.setPitch(1.10f)
+        engine.setSpeechRate(1.02f)
 
-        // 3. Scan system voices for high-quality female profiles
         try {
             val voices = engine.voices
             if (!voices.isNullOrEmpty()) {
@@ -84,6 +107,85 @@ class TtsManager(
 
     fun speak(text: String, speechRate: Float = 1.02f, pitch: Float = 1.10f) {
         lastSpokenText = text
+        stop()
+
+        if (fishAudioApiKey.isNotBlank()) {
+            scope.launch {
+                val success = speakWithFishAudio(text)
+                if (!success) {
+                    speakWithLocalTts(text, speechRate, pitch)
+                }
+            }
+        } else {
+            speakWithLocalTts(text, speechRate, pitch)
+        }
+    }
+
+    private suspend fun speakWithFishAudio(text: String): Boolean = withContext(Dispatchers.IO) {
+        try {
+            val jsonBody = JSONObject().apply {
+                put("text", text)
+                put("reference_id", fishAudioVoiceId)
+                put("format", "mp3")
+            }.toString()
+
+            val request = Request.Builder()
+                .url("https://api.fish.audio/v1/tts")
+                .header("Authorization", "Bearer $fishAudioApiKey")
+                .header("Content-Type", "application/json")
+                .post(jsonBody.toRequestBody("application/json".toMediaType()))
+                .build()
+
+            val response = httpClient.newCall(request).execute()
+            if (!response.isSuccessful || response.body == null) {
+                return@withContext false
+            }
+
+            val tempAudioFile = File(context.cacheDir, "jarvis_tts_output.mp3")
+            response.body!!.byteStream().use { input ->
+                FileOutputStream(tempAudioFile).use { output ->
+                    input.copyTo(output)
+                }
+            }
+
+            withContext(Dispatchers.Main) {
+                playAudioFile(tempAudioFile)
+            }
+            true
+        } catch (e: Exception) {
+            false
+        }
+    }
+
+    private fun playAudioFile(file: File) {
+        try {
+            mediaPlayer?.release()
+            mediaPlayer = MediaPlayer().apply {
+                setDataSource(file.absolutePath)
+                setOnPreparedListener {
+                    isSpeaking = true
+                    start()
+                }
+                setOnCompletionListener {
+                    isSpeaking = false
+                    try { file.delete() } catch (ignored: Exception) {}
+                    onSpeechDone()
+                }
+                setOnErrorListener { _, _, _ ->
+                    isSpeaking = false
+                    try { file.delete() } catch (ignored: Exception) {}
+                    onSpeechDone()
+                    true
+                }
+                prepareAsync()
+            }
+        } catch (e: Exception) {
+            isSpeaking = false
+            onSpeechDone()
+        }
+    }
+
+    private fun speakWithLocalTts(text: String, speechRate: Float, pitch: Float) {
         tts?.setSpeechRate(speechRate)
         tts?.setPitch(pitch)
         val utteranceId = System.currentTimeMillis().toString()
@@ -92,6 +194,13 @@ class TtsManager(
     }
 
     fun stop() {
+        try {
+            if (mediaPlayer?.isPlaying == true) {
+                mediaPlayer?.stop()
+            }
+            mediaPlayer?.reset()
+        } catch (ignored: Exception) {}
+
         tts?.stop()
         isSpeaking = false
     }
@@ -103,7 +212,11 @@ class TtsManager(
     }
 
     fun shutdown() {
-        tts?.stop()
+        stop()
+        try {
+            mediaPlayer?.release()
+            mediaPlayer = null
+        } catch (ignored: Exception) {}
         tts?.shutdown()
         tts = null
         isSpeaking = false
