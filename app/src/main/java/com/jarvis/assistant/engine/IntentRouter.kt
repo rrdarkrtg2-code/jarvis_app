@@ -97,7 +97,6 @@ class IntentRouter(
     private suspend fun handleLocalPattern(pattern: CommandPattern, rawQuery: String): AssistantResponse? {
         return when (pattern) {
             is CommandPattern.InstantResponse -> AssistantResponse(pattern.answer)
-        return when (pattern) {
             is CommandPattern.GetBattery -> {
                 val status = deviceController.getBatteryLevel()
                 auditRepository.recordAction("device_query", rawQuery, "LOW", "SUCCESS", status)
