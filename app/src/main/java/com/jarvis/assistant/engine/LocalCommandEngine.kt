@@ -101,6 +101,7 @@ class LocalCommandEngine {
 
             // 8. Settings
             text == "open settings" -> CommandPattern.OpenSettings("general")
+            text.contains("accessibility") || text.contains("turn on accessibility") -> CommandPattern.OpenSettings("accessibility")
             text.contains("wifi settings") || text.contains("open wifi") -> CommandPattern.OpenSettings("wifi")
             text.contains("bluetooth settings") || text.contains("open bluetooth") -> CommandPattern.OpenSettings("bluetooth")
             text.contains("display settings") -> CommandPattern.OpenSettings("display")

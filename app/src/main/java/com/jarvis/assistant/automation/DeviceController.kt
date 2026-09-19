@@ -81,6 +81,7 @@ class DeviceController(private val context: Context) {
             "wifi" -> Intent(Settings.ACTION_WIFI_SETTINGS)
             "bluetooth" -> Intent(Settings.ACTION_BLUETOOTH_SETTINGS)
             "display" -> Intent(Settings.ACTION_DISPLAY_SETTINGS)
+            "accessibility" -> Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
             else -> Intent(Settings.ACTION_SETTINGS)
         }.apply {
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
