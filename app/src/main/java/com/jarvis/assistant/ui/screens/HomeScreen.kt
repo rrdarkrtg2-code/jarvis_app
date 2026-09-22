@@ -173,7 +173,7 @@ fun HomeScreen(
             HudPill(label = "STATUS", value = "ONLINE", valueColor = JarvisSuccess)
             HudPill(label = "BATTERY", value = batteryText, valueColor = JarvisCyan)
             HudPill(label = "TIME", value = timeFormat, valueColor = JarvisTextPrimary)
-            HudPill(label = "MODE", value = "OFFLINE", valueColor = JarvisAmberBright)
+            HudPill(label = "MODE", value = "ONLINE", valueColor = JarvisAmberBright)
         }
 
         Spacer(modifier = Modifier.height(16.dp))
