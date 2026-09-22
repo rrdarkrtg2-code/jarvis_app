@@ -161,10 +161,10 @@ class TtsManager(
 
     private fun speakWithLocalTts(text: String, speechRate: Float, pitch: Float) {
         val engine = tts ?: return
-        val hasHindi = text.any { it in '\u0900'..ॿ\ } ||
+        val hasHindi = text.any { it in '\u0900'..'\u097F' } ||
                 listOf("kaise", "kya", "hai", "karo", "bolo", "achha", "haan", "nahi", "tum", "mera", "meri", "hum", "aap", "theek", "batao", "boss", "yaar").any { text.contains(it, ignoreCase = true) }
 
-        if (hasHindi) {
+        val hasHindi = text.any { it in '\u0900'..'\u097F' } ||
             val hindiLocale = Locale("hi", "IN")
             if (engine.availableLanguages?.contains(hindiLocale) == true) engine.language = hindiLocale
         } else {
