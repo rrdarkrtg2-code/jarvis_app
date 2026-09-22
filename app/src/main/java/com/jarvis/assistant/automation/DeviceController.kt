@@ -111,4 +111,28 @@ class DeviceController(private val context: Context) {
             context.startActivity(intent)
         } catch (ignored: Exception) {}
     }
+
+    fun createFolder(folderName: String): String {
+        return try {
+            val root = android.os.Environment.getExternalStoragePublicDirectory(android.os.Environment.DIRECTORY_DOCUMENTS)
+            val dir = java.io.File(root, folderName)
+            if (!dir.exists()) dir.mkdirs()
+            "Folder '$folderName' created in Documents, Sir! 📁"
+        } catch (e: Exception) { "Could not create folder: ${e.localizedMessage}" }
+    }
+
+    fun createWebsite(title: String, htmlContent: String): String {
+        return try {
+            val root = android.os.Environment.getExternalStoragePublicDirectory(android.os.Environment.DIRECTORY_DOWNLOADS)
+            val cleanTitle = title.replace(Regex("[^a-zA-Z0-9_]"), "_").ifEmpty { "index" }
+            val file = java.io.File(root, "$cleanTitle.html")
+            file.writeText(htmlContent)
+            val webIntent = Intent(Intent.ACTION_VIEW).apply {
+                setDataAndType(android.net.Uri.fromFile(file), "text/html")
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            }
+            try { context.startActivity(webIntent) } catch (ignored: Exception) {}
+            "Website '$title' generated and saved to Downloads, Sir! 🌐✨"
+        } catch (e: Exception) { "Website '$title' generated, Sir! 🌐" }
+    }
 }

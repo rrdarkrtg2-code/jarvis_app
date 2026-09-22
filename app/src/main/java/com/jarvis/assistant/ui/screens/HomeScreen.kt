@@ -142,7 +142,7 @@ fun HomeScreen(
                     letterSpacing = 3.sp
                 )
                 Text(
-                    text = "MAYA NEURAL CORE",
+                    text = "J.A.R.V.I.S. NEURAL CORE",
                     color = JarvisTextSecondary,
                     fontSize = 9.sp,
                     letterSpacing = 2.sp,

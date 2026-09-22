@@ -213,6 +213,26 @@ class IntentRouter(
 
     private suspend fun handleAIToolCall(toolCall: com.jarvis.assistant.ai.ToolCall, rawQuery: String): AssistantResponse {
         return when (toolCall.name) {
+                        "tap_button", "click_element" -> {
+                val target = toolCall.arguments["text"]?.toString() ?: toolCall.arguments["target"]?.toString() ?: ""
+                AssistantResponse(AccessibilityController.clickByText(target))
+            }
+            "type_text" -> {
+                val text = toolCall.arguments["text"]?.toString() ?: ""
+                AssistantResponse(AccessibilityController.typeText(text))
+            }
+            "read_screen", "see_screen" -> AssistantResponse(AccessibilityController.seeCurrentScreen())
+            "scroll_down" -> AssistantResponse(if (AccessibilityController.scroll(forward = true)) "Scrolled down, Sir." else "Could not scroll.")
+            "scroll_up" -> AssistantResponse(if (AccessibilityController.scroll(forward = false)) "Scrolled up, Sir." else "Could not scroll.")
+            "create_website" -> {
+                val title = toolCall.arguments["title"]?.toString() ?: "Website"
+                val code = toolCall.arguments["html_code"]?.toString() ?: "<h1>J.A.R.V.I.S.</h1>"
+                AssistantResponse(deviceController.createWebsite(title, code))
+            }
+            "create_folder" -> {
+                val name = toolCall.arguments["folder_name"]?.toString() ?: "Folder"
+                AssistantResponse(deviceController.createFolder(name))
+            }
             "open_app" -> {
                 val app = toolCall.arguments["app_name"]?.toString() ?: ""
                 val res = appDiscoveryManager.findAndLaunchApp(app)
