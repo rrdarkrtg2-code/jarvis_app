@@ -94,8 +94,8 @@ class TtsManager(
                 put("text", text)
                 put("model_id", "eleven_multilingual_v2")
                 val voiceSettings = JSONObject().apply {
-                    put("stability", 0.45)
-                    put("similarity_boost", 0.85)
+                    put("stability", 0.35)
+                    put("similarity_boost", 0.90)
                 }
                 put("voice_settings", voiceSettings)
             }.toString()
