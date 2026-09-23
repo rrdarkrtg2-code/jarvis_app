@@ -81,7 +81,8 @@ class IntentRouter(
                 } else {
                     val errorMsg = aiResponse.errorMessage ?: "AI Provider error"
                     auditRepository.recordAction("ai_query", trimmed, "LOW", "FAILURE", errorMsg)
-                    return AssistantResponse("Boss, I am currently on Local Core. Please verify your Gemini API key in Settings.")
+                    val reply = if (aiResponse.text.isNotBlank()) aiResponse.text else "AI Error: $errorMsg"
+                    return AssistantResponse(reply)
                 }
             } catch (e: Exception) {
                 return AssistantResponse("I encountered an issue contacting the AI service. Please verify your connection.")
@@ -211,9 +212,9 @@ class IntentRouter(
         }
     }
 
-    private suspend fun handleAIToolCall(toolCall: com.jarvis.assistant.ai.ToolCall, rawQuery: String): AssistantResponse {
+        private suspend fun handleAIToolCall(toolCall: com.jarvis.assistant.ai.ToolCall, rawQuery: String): AssistantResponse {
         return when (toolCall.name) {
-                        "tap_button", "click_element" -> {
+            "tap_button", "click_element" -> {
                 val target = toolCall.arguments["text"]?.toString() ?: toolCall.arguments["target"]?.toString() ?: ""
                 AssistantResponse(AccessibilityController.clickByText(target))
             }
@@ -221,42 +222,44 @@ class IntentRouter(
                 val text = toolCall.arguments["text"]?.toString() ?: ""
                 AssistantResponse(AccessibilityController.typeText(text))
             }
-            "read_screen", "see_screen" -> AssistantResponse(AccessibilityController.seeCurrentScreen())
+            "read_screen", "see_screen" -> {
+                AssistantResponse(AccessibilityController.seeCurrentScreen())
+            }
             "scroll_down" -> AssistantResponse(if (AccessibilityController.scroll(forward = true)) "Scrolled down, Sir." else "Could not scroll.")
             "scroll_up" -> AssistantResponse(if (AccessibilityController.scroll(forward = false)) "Scrolled up, Sir." else "Could not scroll.")
             "create_website" -> {
-                val title = toolCall.arguments["title"]?.toString() ?: "Website"
-                val code = toolCall.arguments["html_code"]?.toString() ?: "<h1>J.A.R.V.I.S.</h1>"
+                val title = toolCall.arguments["title"]?.toString() ?: "New_Website"
+                val code = toolCall.arguments["html_code"]?.toString() ?: "<h1>Welcome to J.A.R.V.I.S.</h1>"
                 AssistantResponse(deviceController.createWebsite(title, code))
             }
             "create_folder" -> {
-                val name = toolCall.arguments["folder_name"]?.toString() ?: "Folder"
+                val name = toolCall.arguments["folder_name"]?.toString() ?: "New_Folder"
                 AssistantResponse(deviceController.createFolder(name))
             }
             "open_app" -> {
                 val app = toolCall.arguments["app_name"]?.toString() ?: ""
                 val res = appDiscoveryManager.findAndLaunchApp(app)
                 when (res) {
-                    is AppLaunchResult.Launched -> AssistantResponse("Opening ${res.appName}.")
-                    is AppLaunchResult.DisambiguationRequired -> AssistantResponse("Multiple apps found: ${res.candidates.joinToString(", ")}. Which one?")
+                    is AppLaunchResult.Launched -> AssistantResponse("Opening ${res.appName}, Sir.")
+                    is AppLaunchResult.DisambiguationRequired -> AssistantResponse("Found multiple matching apps: ${res.candidates.joinToString(", ")}. Which one should I open?")
                     is AppLaunchResult.NotFound -> AssistantResponse("I could not find '$app' on this device.")
                 }
             }
             "search_web" -> {
                 val q = toolCall.arguments["query"]?.toString() ?: ""
                 deviceController.searchWeb(q)
-                AssistantResponse("Searching web for '$q'.")
+                AssistantResponse("Searching web for '$q', Sir.")
             }
             "search_youtube" -> {
                 val q = toolCall.arguments["query"]?.toString() ?: ""
                 deviceController.searchYouTube(q)
-                AssistantResponse("Searching YouTube for '$q'.")
+                AssistantResponse("Searching YouTube for '$q', Sir.")
             }
             "get_battery" -> AssistantResponse(deviceController.getBatteryLevel())
             "toggle_flashlight" -> {
                 val enable = toolCall.arguments["enable"] as? Boolean ?: true
                 val ok = deviceController.setFlashlight(enable)
-                AssistantResponse(if (ok) (if (enable) "Flashlight on." else "Flashlight off.") else "Flashlight unavailable.")
+                AssistantResponse(if (ok) (if (enable) "Flashlight turned on, Sir." else "Flashlight turned off, Sir.") else "Flashlight unavailable.")
             }
             "create_reminder" -> {
                 val title = toolCall.arguments["title"]?.toString() ?: "Reminder"
@@ -268,9 +271,9 @@ class IntentRouter(
                 val cat = toolCall.arguments["category"]?.toString() ?: "fact"
                 val content = toolCall.arguments["content"]?.toString() ?: ""
                 memoryRepository.addMemory(cat, content)
-                AssistantResponse("Saved to memory: $content")
+                AssistantResponse("Saved to memory: $content, Sir.")
             }
-            else -> AssistantResponse("Executed ${toolCall.name}.")
+            else -> AssistantResponse("Executed ${toolCall.name}, Sir.")
         }
     }
 

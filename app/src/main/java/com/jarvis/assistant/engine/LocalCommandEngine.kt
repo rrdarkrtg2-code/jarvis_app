@@ -5,8 +5,7 @@ class LocalCommandEngine {
     fun parseCommand(rawText: String): CommandPattern? {
         val text = rawText.lowercase().trim()
             .replace(Regex("^(hey[ \\t]+)?jarvis[, \\t]*"), "")
-            .replace(Regex("^(hey[ \\t]+)?maya[, \\t]*"), "")
-            .replace(Regex("^wake up (jarvis|maya)[, \\t]*"), "")
+            .replace(Regex("^wake up jarvis[, \\t]*"), "")
             .trim()
 
         return when {
@@ -17,22 +16,19 @@ class LocalCommandEngine {
                 CommandPattern.InstantResponse("I was created and developed by RTGYASH (Team RTG), my boss!")
             }
             text.contains("what is your name") || text.contains("your name") || text.contains("who are you") ||
-            text.contains("naam kya hai") || text == "name" || text == "your name" -> {
-                CommandPattern.InstantResponse("I am J.A.R.V.I.S. (Maya AI system), your autonomous device assistant, created by RTGYASH.")
-            }
-            text == "hi" || text == "hello" || text == "hey" || text == "namaste" || text.startsWith("hi ") || text.startsWith("hello ") -> {
-                CommandPattern.InstantResponse("Hello boss RTGYASH! I am online and listening. What would you like me to do on your device?")
-            }
-            text.contains("how are you") || text.contains("how r u") || text.contains("kaise ho") -> {
-                CommandPattern.InstantResponse("I am running at peak performance, boss! Ready to assist you.")
-            }
-            text.contains("what can you do") || text.contains("help me") || text.contains("features") -> {
-                CommandPattern.InstantResponse("Boss, I can control your screen, tap buttons, type text, launch apps, make calls, take screenshots, and manage device settings.")
+            text.contains("naam kya hai") || text == "name" -> {
+                CommandPattern.InstantResponse("I am J.A.R.V.I.S., your autonomous AI personal operating assistant, created by RTGYASH.")
             }
 
             // Close app / go home
             text.contains("close this app") || text.contains("close app") || text == "close" || text == "exit" -> {
                 CommandPattern.GoHome
+            }
+
+            // Accessibility Settings One-Tap
+            text.contains("open accessibility") || text.contains("accessibility settings") ||
+            text.contains("turn on accessibility") || text == "accessibility" -> {
+                CommandPattern.OpenSettings("accessibility")
             }
 
             // Google search commands
@@ -101,7 +97,6 @@ class LocalCommandEngine {
 
             // 8. Settings
             text == "open settings" -> CommandPattern.OpenSettings("general")
-            text.contains("accessibility") || text.contains("turn on accessibility") -> CommandPattern.OpenSettings("accessibility")
             text.contains("wifi settings") || text.contains("open wifi") -> CommandPattern.OpenSettings("wifi")
             text.contains("bluetooth settings") || text.contains("open bluetooth") -> CommandPattern.OpenSettings("bluetooth")
             text.contains("display settings") -> CommandPattern.OpenSettings("display")
@@ -152,6 +147,7 @@ class LocalCommandEngine {
                 CommandPattern.ReadNotifications
             }
 
+            // Everything else (Greetings, questions, conversations, Hindi/English chat) -> Handled live by GEMINI AI!
             else -> null
         }
     }

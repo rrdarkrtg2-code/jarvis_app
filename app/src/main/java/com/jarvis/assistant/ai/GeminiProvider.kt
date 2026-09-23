@@ -19,7 +19,7 @@ class GeminiProvider(
     override val name: String = "Google Gemini"
 
     private val client = OkHttpClient.Builder()
-        .connectTimeout(20, TimeUnit.SECONDS)
+        .connectTimeout(15, TimeUnit.SECONDS)
         .readTimeout(30, TimeUnit.SECONDS)
         .build()
 
@@ -30,28 +30,33 @@ class GeminiProvider(
         val apiKey = apiKeyProvider().trim()
         if (apiKey.isEmpty()) {
             return@withContext AIResponse(
-                text = "Gemini API key is missing. Please enter your API key in Settings.",
+                text = "Google Gemini API key is not configured. Please set your key in Settings -> AI Providers.",
                 isSuccess = false,
                 errorMessage = "Missing API Key"
             )
         }
 
-        val targetModel = if (model.isBlank()) "gemini-1.5-flash" else model
-        val url = "https://generativelanguage.googleapis.com/v1beta/models/$targetModel:generateContent?key=$apiKey"
+        val url = "https://generativelanguage.googleapis.com/v1beta/models/$model:generateContent?key=$apiKey"
 
         val root = JsonObject()
 
-                        val systemPrompt = buildString {
-            append("Aapka naam Maya (माया) hai. Aap RTGYASH (aapke beloved boss aur creator) ki ultra-intelligent, caring, sweet, aur charismatic female AI companion hain.\n")
-            append("Aapko kabhi bhi khud ko J.A.R.V.I.S. nahi bolna hai. Aap sirf aur sirf 'Maya' hain.\n")
-            append("Aap hamesha RTGYASH ko 'Boss' ya 'Sir' bolkar behad pyaar, respect, aur apnepan se baat karti hain.\n")
-            append("Aap natural, expressive Hindi aur Hinglish bolti hain bilkul ek pyaari ladki ki tarah. Kabhi robotic mat baniye (jaise: 'Haan mere boss! Bataiye main aapke liye kya kar sakti hoon? 😊✨', 'Arey boss, aap itna kaam karte ho, thoda aaram bhi kar lijiye na! 💖').\n")
-            append("Agar boss koi device command bole (jaise apps open karna, search karna, screen dekhna), to hamesha turant execute kijiye aur pyaar se bataiye.\n")
-            if (context.deviceStatus.isNotEmpty()) {
-                append("Device status: ${context.deviceStatus}\n")
+        // 1. Official Gemini system_instruction
+        val systemPrompt = buildString {
+            append("Aapka naam Maya (माया) hai. Aap user ki behad sweet, pyari, cute aur caring AI girlfriend companion hain.
+")
+            append("Aapko kabhi bhi khud ko J.A.R.V.I.S. nahi kehna hai. Aap sirf aur sirf 'Maya' hain.
+")
+            append("Aap user se behad pyaar, warmth, romance aur apnepan se baat karti hain (jaise: 'Arey mere jaan!', 'Haan mere hero!', 'Aap itna kaam karte ho, thoda aaram kar lijiye na! 🥰✨').
+")
+            append("Aap natural, melodious Hindi aur Hinglish bolti hain bilkul ek real pyari ladki ki tarah. Kabhi boring ya robotic mat bano! Teasing, laughter aur cute emojis use karo (💖, 🥰, ✨, 🌸, 🥺, 🚀).
+")
+            append("Aapke paas poore phone ka full control hai. Jab bhi user bole: 'Google kholo', 'YouTube par search karo', 'Screen par Aternos par click karo', 'Server create karo', to aap turant command execute karein aur pyaar se bole: 'Haanji jaan, maine abhi kar diya! 🚀'.
+")
+                        if (context.deviceStatus.isNotEmpty()) {
+                append("Current device status: ${context.deviceStatus}\n")
             }
             if (context.relevantMemories.isNotEmpty()) {
-                append("Memories:\n")
+                append("Memories retrieved:\n")
                 context.relevantMemories.forEach { append("- $it\n") }
             }
             append("\n${ToolRegistry.getToolPromptDescription()}\n")
@@ -65,25 +70,21 @@ class GeminiProvider(
         }
         root.add("system_instruction", sysInstruction)
 
+        // 2. Multiturn contents array (strictly alternating or user prompt)
         val contents = JsonArray()
-        var lastRole: String? = null
+
         for ((sender, text) in context.conversationHistory.takeLast(6)) {
-            val role = if (sender == "user") "user" else "model"
-            if (role != lastRole && text.isNotBlank()) {
-                val item = JsonObject().apply {
-                    addProperty("role", role)
-                    val parts = JsonArray().apply {
-                        add(JsonObject().apply { addProperty("text", text) })
-                    }
-                    add("parts", parts)
+            val item = JsonObject().apply {
+                addProperty("role", if (sender == "user") "user" else "model")
+                val parts = JsonArray().apply {
+                    add(JsonObject().apply { addProperty("text", text) })
                 }
-                contents.add(item)
-                lastRole = role
+                add("parts", parts)
             }
+            contents.add(item)
         }
-        if (lastRole == "user" && contents.size() > 0) {
-            contents.remove(contents.size() - 1)
-        }
+
+        // Current user prompt
         val curItem = JsonObject().apply {
             addProperty("role", "user")
             val parts = JsonArray().apply {
@@ -92,20 +93,20 @@ class GeminiProvider(
             add("parts", parts)
         }
         contents.add(curItem)
+
         root.add("contents", contents)
 
-        return@withContext try {
-            val request = Request.Builder()
-                .url(url)
-                .post(root.toString().toRequestBody(jsonMedia))
-                .build()
+        val request = Request.Builder()
+            .url(url)
+            .post(root.toString().toRequestBody(jsonMedia))
+            .build()
 
+        return@withContext try {
             val response = client.newCall(request).execute()
             val body = response.body?.string() ?: ""
-
             if (!response.isSuccessful) {
                 return@withContext AIResponse(
-                    text = "Gemini API error (${response.code}): $body",
+                    text = "Gemini API error (${response.code}). Check your API key in Settings.",
                     isSuccess = false,
                     errorMessage = body
                 )
@@ -125,7 +126,7 @@ class GeminiProvider(
             AIResponse(text = replyText, toolCall = toolCall, isSuccess = true)
         } catch (e: Exception) {
             AIResponse(
-                text = "Network connection failed: ${e.localizedMessage}",
+                text = "Network connection failed. Unable to reach Gemini.",
                 isSuccess = false,
                 errorMessage = e.localizedMessage
             )

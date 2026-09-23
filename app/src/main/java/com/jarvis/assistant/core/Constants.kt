@@ -1,8 +1,8 @@
 package com.jarvis.assistant.core
 
 object Constants {
-    const val APP_NAME = "J.A.R.V.I.S."
-    const val APP_SUBTITLE = "Personal AI Operating Assistant"
+    const val APP_NAME = "Maya AI"
+    const val APP_SUBTITLE = "Your Sweet AI Companion"
 
     const val NOTIFICATION_CHANNEL_SERVICE = "jarvis_service_channel"
     const val NOTIFICATION_CHANNEL_REMINDERS = "jarvis_reminders_channel"

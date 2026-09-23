@@ -8,7 +8,9 @@ import android.hardware.camera2.CameraManager
 import android.media.AudioManager
 import android.net.Uri
 import android.os.BatteryManager
+import android.os.Environment
 import android.provider.Settings
+import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -29,9 +31,9 @@ class DeviceController(private val context: Context) {
         val pct = if (level >= 0 && scale > 0) (level * 100 / scale) else -1
         return if (pct >= 0) {
             val chargingText = if (isCharging) " and currently charging" else ""
-            "Your battery is at $pct percent$chargingText."
+            "Your battery is at $pct percent$chargingText, Sir."
         } else {
-            "Unable to read battery status at this moment."
+            "Unable to read battery status at this moment, Sir."
         }
     }
 
@@ -55,25 +57,25 @@ class DeviceController(private val context: Context) {
                 direction,
                 AudioManager.FLAG_SHOW_UI
             )
-            if (increase) "Volume increased." else "Volume decreased."
+            if (increase) "Volume increased, Sir." else "Volume decreased, Sir."
         } catch (e: Exception) {
-            "Could not adjust volume."
+            "Could not adjust volume, Sir."
         }
     }
 
     fun getCurrentTime(): String {
         val sdf = SimpleDateFormat("h:mm a", Locale.getDefault())
-        return "It's ${sdf.format(Date())}."
+        return "It's ${sdf.format(Date())}, Sir."
     }
 
     fun getCurrentDate(): String {
         val sdf = SimpleDateFormat("EEEE, MMMM d, yyyy", Locale.getDefault())
-        return "Today is ${sdf.format(Date())}."
+        return "Today is ${sdf.format(Date())}, Sir."
     }
 
     fun getCurrentDay(): String {
         val sdf = SimpleDateFormat("EEEE", Locale.getDefault())
-        return "Today is ${sdf.format(Date())}."
+        return "Today is ${sdf.format(Date())}, Sir."
     }
 
     fun openSettings(type: String): Boolean {
@@ -114,25 +116,33 @@ class DeviceController(private val context: Context) {
 
     fun createFolder(folderName: String): String {
         return try {
-            val root = android.os.Environment.getExternalStoragePublicDirectory(android.os.Environment.DIRECTORY_DOCUMENTS)
-            val dir = java.io.File(root, folderName)
-            if (!dir.exists()) dir.mkdirs()
-            "Folder '$folderName' created in Documents, Sir! 📁"
-        } catch (e: Exception) { "Could not create folder: ${e.localizedMessage}" }
+            val root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)
+            val dir = File(root, folderName)
+            if (!dir.exists()) {
+                dir.mkdirs()
+            }
+            "Folder '$folderName' created successfully in Documents, Sir! 📁"
+        } catch (e: Exception) {
+            "Could not create folder: ${e.localizedMessage}"
+        }
     }
 
     fun createWebsite(title: String, htmlContent: String): String {
         return try {
-            val root = android.os.Environment.getExternalStoragePublicDirectory(android.os.Environment.DIRECTORY_DOWNLOADS)
+            val root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
             val cleanTitle = title.replace(Regex("[^a-zA-Z0-9_]"), "_").ifEmpty { "index" }
-            val file = java.io.File(root, "$cleanTitle.html")
+            val file = File(root, "$cleanTitle.html")
             file.writeText(htmlContent)
             val webIntent = Intent(Intent.ACTION_VIEW).apply {
-                setDataAndType(android.net.Uri.fromFile(file), "text/html")
+                setDataAndType(Uri.fromFile(file), "text/html")
                 addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             }
-            try { context.startActivity(webIntent) } catch (ignored: Exception) {}
-            "Website '$title' generated and saved to Downloads, Sir! 🌐✨"
-        } catch (e: Exception) { "Website '$title' generated, Sir! 🌐" }
+            try {
+                context.startActivity(webIntent)
+            } catch (ignored: Exception) {}
+            "Website '$title' generated successfully and saved to Downloads, Sir! 🌐✨"
+        } catch (e: Exception) {
+            "Website '$title' generated, Sir! 🌐"
+        }
     }
 }

@@ -124,7 +124,7 @@ fun HomeScreen(
                             .background(JarvisSuccess)
                     )
                     Spacer(modifier = Modifier.width(6.dp))
-                    Text("BOSS RTGYASH", color = JarvisCyan, fontSize = 11.sp, fontWeight = FontWeight.Bold, letterSpacing = 1.sp)
+                    Text("MY BOSS & HERO 💖", color = JarvisCyan, fontSize = 11.sp, fontWeight = FontWeight.Bold, letterSpacing = 1.sp)
                 }
             }
 
@@ -142,7 +142,7 @@ fun HomeScreen(
                     letterSpacing = 3.sp
                 )
                 Text(
-                    text = "NEURAL COMPANION CORE",
+                    text = "SWEET COMPANION CORE ✨",
                     color = JarvisTextSecondary,
                     fontSize = 9.sp,
                     letterSpacing = 2.sp,
@@ -279,7 +279,7 @@ fun HomeScreen(
                 ) {
                     JarvisCoreOrb(state = OrbState.IDLE, size = 220.dp)
                     Spacer(modifier = Modifier.height(14.dp))
-                    Text("MAYA AI ONLINE ✨", color = JarvisCyan, fontWeight = FontWeight.Bold, fontSize = 14.sp, letterSpacing = 2.sp)
+                    Text("MAYA AI • CUTE COMPANION 💖", color = JarvisCyan, fontWeight = FontWeight.Bold, fontSize = 14.sp, letterSpacing = 2.sp)
                     Text("\"How may I assist you today, Boss?\"", color = JarvisTextSecondary, fontSize = 12.sp)
 
                     Spacer(modifier = Modifier.height(16.dp))
@@ -320,7 +320,7 @@ fun HomeScreen(
         OutlinedTextField(
             value = textInput,
             onValueChange = { textInput = it },
-            placeholder = { Text("Talk to Maya or control screen...", color = JarvisTextSecondary, fontSize = 12.sp) },
+            placeholder = { Text("Talk to Maya or say commands...", color = JarvisTextSecondary, fontSize = 12.sp) },
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(16.dp),
             trailingIcon = {

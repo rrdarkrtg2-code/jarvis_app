@@ -82,10 +82,10 @@ fun JarvisCoreOrb(
 
     val primaryColor = when (state) {
         OrbState.THINKING -> JarvisAmberBright
-        OrbState.SPEAKING -> JarvisMagenta
+        OrbState.SPEAKING -> Color(0xFFFF2A85)
         OrbState.ERROR -> JarvisError
-        OrbState.EXECUTING -> JarvisPurple
-        else -> JarvisCyanBright
+        OrbState.EXECUTING -> Color(0xFFBD00FF)
+        else -> Color(0xFFFF4081)
     }
 
     val secondaryColor = when (state) {

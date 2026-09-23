@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">Maya AI</string>
-    <string name="app_subtitle">Personal AI Operating Assistant</string>
-    <string name="accessibility_service_label">Maya AI Device Automation</string>
-    <string name="accessibility_service_description">Enables Maya AI to assist with legitimate screen interactions, such as scrolling, tapping UI buttons, and navigation on user request.</string>
-    <string name="notification_listener_label">Maya AI Notification Assistant</string>
+    <string name="app_subtitle">Your Sweet AI Companion</string>
+    <string name="accessibility_service_label">Maya AI Screen &amp; Device Automation</string>
+    <string name="accessibility_service_description">Enables Maya AI to see your screen, open apps, click buttons, and execute actions on voice command.</string>
+    <string name="notification_listener_label">Maya AI Companion Alerts</string>
     <string name="tile_label">Maya AI</string>
 </resources>
