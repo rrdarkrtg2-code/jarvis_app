@@ -1,4 +1,4 @@
-name: Build J.A.R.V.I.S. APK
+name: Build Maya AI APK
 
 on:
   push:
@@ -21,10 +21,7 @@ jobs:
 
     - name: Ensure Gradle Wrapper & Permissions
       run: |
-        if [ ! -f "gradlew" ]; then
-          echo "Generating Gradle wrapper 8.6..."
-          gradle wrapper --gradle-version 8.6
-        fi
+        gradle wrapper --gradle-version 8.6
         chmod +x gradlew
 
     - name: Build Debug APK
@@ -33,7 +30,7 @@ jobs:
     - name: Upload Debug APK Artifact
       uses: actions/upload-artifact@v4
       with:
-        name: jarvis-assistant-debug-apk
+        name: maya-ai-debug-apk
         path: app/build/outputs/apk/debug/*.apk
         retention-days: 14
         if-no-files-found: error
