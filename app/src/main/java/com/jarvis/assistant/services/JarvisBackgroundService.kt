@@ -33,10 +33,10 @@ class JarvisBackgroundService : Service() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
                 Constants.NOTIFICATION_CHANNEL_SERVICE,
-                "J.A.R.V.I.S. Background Assistant",
+                "Maya Background Assistant",
                 NotificationManager.IMPORTANCE_LOW
             ).apply {
-                description = "Maintains J.A.R.V.I.S. quick assistant & system controls"
+                description = "Maintains Maya quick assistant & system controls"
                 setShowBadge(false)
             }
             notificationManager.createNotificationChannel(channel)
@@ -60,7 +60,7 @@ class JarvisBackgroundService : Service() {
         )
 
         val notification: Notification = NotificationCompat.Builder(this, Constants.NOTIFICATION_CHANNEL_SERVICE)
-            .setContentTitle("J.A.R.V.I.S. Core Online")
+            .setContentTitle("Maya Core Online")
             .setContentText("Boss RTGYASH • Tap to speak or control device")
             .setSmallIcon(R.drawable.ic_jarvis_logo)
             .setContentIntent(pendingOpen)

@@ -44,7 +44,7 @@ import com.jarvis.assistant.ui.screens.OwnerMenuScreen
 import com.jarvis.assistant.ui.screens.RemindersScreen
 import com.jarvis.assistant.ui.screens.SettingsScreen
 import com.jarvis.assistant.ui.screens.ToolsScreen
-import com.jarvis.assistant.ui.theme.JARVISTheme
+import com.jarvis.assistant.ui.theme.MayaTheme
 import com.jarvis.assistant.ui.theme.JarvisBackground
 import com.jarvis.assistant.ui.theme.JarvisCard
 import com.jarvis.assistant.ui.theme.JarvisCyan
@@ -69,7 +69,7 @@ class MainActivity : ComponentActivity() {
         }
 
         setContent {
-            JARVISTheme {
+            MayaTheme {
                 MainAppNav(viewModel)
             }
         }

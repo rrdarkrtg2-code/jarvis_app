@@ -20,7 +20,7 @@ class ReminderBroadcastReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
         val reminderId = intent.getLongExtra(Constants.EXTRA_REMINDER_ID, -1L)
-        val title = intent.getStringExtra(Constants.EXTRA_REMINDER_TITLE) ?: "Reminder from J.A.R.V.I.S."
+        val title = intent.getStringExtra(Constants.EXTRA_REMINDER_TITLE) ?: "Reminder from Maya"
 
         showNotification(context, reminderId, title)
 
@@ -37,7 +37,7 @@ class ReminderBroadcastReceiver : BroadcastReceiver() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
                 Constants.NOTIFICATION_CHANNEL_REMINDERS,
-                "J.A.R.V.I.S. Reminders",
+                "Maya Reminders",
                 NotificationManager.IMPORTANCE_HIGH
             ).apply {
                 description = "Alerts for scheduled tasks and reminders"
@@ -58,7 +58,7 @@ class ReminderBroadcastReceiver : BroadcastReceiver() {
 
         val notification = NotificationCompat.Builder(context, Constants.NOTIFICATION_CHANNEL_REMINDERS)
             .setSmallIcon(R.drawable.ic_jarvis_logo)
-            .setContentTitle("J.A.R.V.I.S. Reminder")
+            .setContentTitle("Maya Reminder")
             .setContentText(title)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setAutoCancel(true)

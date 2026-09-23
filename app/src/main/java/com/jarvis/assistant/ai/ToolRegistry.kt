@@ -98,7 +98,7 @@ object ToolRegistry {
         for (t in tools) {
             sb.append("- ${t.name}: ${t.description} Params: ${t.parameters}\n")
         }
-        sb.append("If no tool is required, provide a warm, charismatic, loving, and intelligent response in character as J.A.R.V.I.S.\n")
+        sb.append("If no tool is required, provide a warm, charismatic, loving, and intelligent response in character as Maya\n")
         return sb.toString()
     }
 }

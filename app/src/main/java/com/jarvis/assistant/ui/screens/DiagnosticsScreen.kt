@@ -53,7 +53,7 @@ fun DiagnosticsScreen() {
     val scope = rememberCoroutineScope()
 
     var consoleInput by remember { mutableStateOf("") }
-    var consoleOutput by remember { mutableStateOf("J.A.R.V.I.S. Command Diagnostic Console Ready.") }
+    var consoleOutput by remember { mutableStateOf("Maya Command Diagnostic Console Ready.") }
 
     val speechAvailable = SpeechRecognizer.isRecognitionAvailable(context)
     val accessibilityEnabled = AccessibilityController.isServiceEnabled()

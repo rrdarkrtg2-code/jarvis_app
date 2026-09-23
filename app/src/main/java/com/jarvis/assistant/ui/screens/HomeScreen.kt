@@ -131,7 +131,7 @@ fun HomeScreen(
             // Central Title
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Text(
-                    text = "J.A.R.V.I.S.",
+                    text = "Maya",
                     color = when (state.orbState) {
                         OrbState.THINKING -> JarvisAmberBright
                         OrbState.SPEAKING -> JarvisMagenta

@@ -229,7 +229,7 @@ class IntentRouter(
             "scroll_up" -> AssistantResponse(if (AccessibilityController.scroll(forward = false)) "Scrolled up, Sir." else "Could not scroll.")
             "create_website" -> {
                 val title = toolCall.arguments["title"]?.toString() ?: "New_Website"
-                val code = toolCall.arguments["html_code"]?.toString() ?: "<h1>Welcome to J.A.R.V.I.S.</h1>"
+                val code = toolCall.arguments["html_code"]?.toString() ?: "<h1>Welcome to Maya</h1>"
                 AssistantResponse(deviceController.createWebsite(title, code))
             }
             "create_folder" -> {

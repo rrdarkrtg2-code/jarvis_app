@@ -166,7 +166,7 @@ class JarvisApp : Application() {
 
             val serviceChannel = NotificationChannel(
                 Constants.NOTIFICATION_CHANNEL_SERVICE,
-                "J.A.R.V.I.S. Background Service",
+                "Maya Background Service",
                 NotificationManager.IMPORTANCE_LOW
             ).apply {
                 description = "Shows persistent status while assistant is running"
@@ -174,7 +174,7 @@ class JarvisApp : Application() {
 
             val remindersChannel = NotificationChannel(
                 Constants.NOTIFICATION_CHANNEL_REMINDERS,
-                "J.A.R.V.I.S. Reminders",
+                "Maya Reminders",
                 NotificationManager.IMPORTANCE_HIGH
             ).apply {
                 description = "Task reminders and alarm notifications"

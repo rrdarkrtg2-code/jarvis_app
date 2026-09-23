@@ -79,7 +79,7 @@ fun MemoryScreen() {
             letterSpacing = 1.sp
         )
         Text(
-            text = "Facts, preferences, and projects J.A.R.V.I.S. remembers across sessions",
+            text = "Facts, preferences, and projects Maya remembers across sessions",
             color = JarvisTextSecondary,
             fontSize = 12.sp
         )

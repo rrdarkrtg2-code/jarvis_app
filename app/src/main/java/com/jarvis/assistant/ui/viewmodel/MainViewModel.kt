@@ -101,7 +101,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                     lastResponse = response.displayText
                 )
 
-                // Save JARVIS message to DB
+                // Save Maya message to DB
                 conversationRepo.addMessage(convId, "jarvis", response.displayText)
 
                 // Speak via TTS

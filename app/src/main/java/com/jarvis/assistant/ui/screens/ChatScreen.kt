@@ -108,7 +108,7 @@ fun ChatScreen(viewModel: MainViewModel) {
             OutlinedTextField(
                 value = input,
                 onValueChange = { input = it },
-                placeholder = { Text("Message J.A.R.V.I.S...", color = JarvisTextSecondary) },
+                placeholder = { Text("Message Maya..", color = JarvisTextSecondary) },
                 modifier = Modifier.weight(1f),
                 shape = RoundedCornerShape(24.dp),
                 colors = OutlinedTextFieldDefaults.colors(
@@ -175,7 +175,7 @@ fun MessageBubble(message: MessageEntity, onSpeak: () -> Unit) {
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = if (isUser) "YOU" else "J.A.R.V.I.S.",
+                        text = if (isUser) "YOU" else "Maya",
                         color = if (isUser) JarvisCyan else JarvisCyan,
                         fontSize = 11.sp,
                         fontWeight = FontWeight.Bold

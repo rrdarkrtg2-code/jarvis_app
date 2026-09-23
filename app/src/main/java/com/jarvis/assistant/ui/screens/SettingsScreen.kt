@@ -275,7 +275,7 @@ fun SettingsScreen(onNavigateToDiagnostics: () -> Unit) {
 
                 // FALLBACK API
                 Text("API 2 (Automatic Fallback Provider)", color = JarvisCyan, fontSize = 13.sp, fontWeight = FontWeight.Bold)
-                Text("If API 1 runs out of credits or encounters an error, J.A.R.V.I.S. automatically routes to API 2.", color = JarvisTextSecondary, fontSize = 11.sp)
+                Text("If API 1 runs out of credits or encounters an error, Maya automatically routes to API 2.", color = JarvisTextSecondary, fontSize = 11.sp)
                 Spacer(modifier = Modifier.height(6.dp))
 
                 ExposedDropdownMenuBox(
@@ -437,7 +437,7 @@ fun SettingsScreen(onNavigateToDiagnostics: () -> Unit) {
             ) {
                 Column(modifier = Modifier.weight(1f)) {
                     Text("Background Service", color = JarvisTextPrimary, fontSize = 13.sp, fontWeight = FontWeight.SemiBold)
-                    Text("Maintains J.A.R.V.I.S. active notification", color = JarvisTextSecondary, fontSize = 11.sp)
+                    Text("Maintains Maya active notification", color = JarvisTextSecondary, fontSize = 11.sp)
                 }
                 Switch(
                     checked = backgroundServiceEnabled,

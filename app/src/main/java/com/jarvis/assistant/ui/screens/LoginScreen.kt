@@ -77,7 +77,7 @@ fun LoginScreen(
         Spacer(modifier = Modifier.height(24.dp))
 
         Text(
-            text = "J.A.R.V.I.S. SECURITY",
+            text = "Maya SECURITY",
             color = JarvisCyan,
             fontSize = 20.sp,
             fontWeight = FontWeight.ExtraBold,

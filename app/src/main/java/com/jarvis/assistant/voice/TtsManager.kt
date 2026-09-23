@@ -35,7 +35,7 @@ class TtsManager(
 
     // ElevenLabs API Configuration (Sweet & Expressive Female AI Voice from the reels)
     var elevenLabsApiKey: String = "sk_7f555da89acb8adcec2270889528b94086d1a09510138e4d"
-    var elevenLabsVoiceId: String = "pFZP5JQG7iQjIQuC4Bku" // Sarah - warm, expressive, gentle female voice
+    var elevenLabsVoiceId: String = "ocZQ262SsZb9RIxcQBOj" // Sarah - warm, expressive, gentle female voice
 
     // Fish Audio API Configuration (Backup AI voice)
     var fishAudioApiKey: String = "sk-fish-g5_HthiFvRnFfVPLBsGho9UWh87Hbignt6gU-87mGMc"

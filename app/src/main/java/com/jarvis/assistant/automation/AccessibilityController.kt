@@ -43,11 +43,11 @@ object AccessibilityController {
         return scrollableNode.performAction(action)
     }
 
-    // Vision / Screen Sight: J.A.R.V.I.S. inspects and reads the active screen
+    // Vision / Screen Sight: Maya inspects and reads the active screen
     fun readVisibleScreen(): String = seeCurrentScreen()
 
     fun seeCurrentScreen(): String {
-        val service = serviceRef ?: return "Accessibility automation is disabled. Please enable J.A.R.V.I.S. in Android Accessibility Settings so I can see and control your screen, Sir."
+        val service = serviceRef ?: return "Accessibility automation is disabled. Please enable Maya in Android Accessibility Settings so I can see and control your screen, Sir."
         val root = service.rootInActiveWindow ?: return "I cannot see the screen right now. Please make sure an app window is active."
 
         val pkgName = root.packageName?.toString() ?: "System"
@@ -80,7 +80,7 @@ object AccessibilityController {
 
     // Full screen control: Click any button or element by name / text
     fun clickByText(query: String): String {
-        val service = serviceRef ?: return "Accessibility is disabled. Enable J.A.R.V.I.S. in Accessibility Settings to control the screen."
+        val service = serviceRef ?: return "Accessibility is disabled. Enable Maya in Accessibility Settings to control the screen."
         val root = service.rootInActiveWindow ?: return "Could not access screen."
 
         val target = query.lowercase().trim()

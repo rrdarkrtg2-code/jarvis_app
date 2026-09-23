@@ -13,11 +13,11 @@ class LocalCommandEngine {
             text.contains("who made you") || text.contains("who created you") || text.contains("who is your boss") ||
             text.contains("creator") || text.contains("tumhe kisne banaya") || text.contains("kone banaya") ||
             text.contains("who made u") || text == "creator" || text == "owner" -> {
-                CommandPattern.InstantResponse("I was created and developed by RTGYASH (Team RTG), my boss!")
+                CommandPattern.InstantResponse("Mujhe mere pyare boss aur creator RTGYASH ne banaya hai! 🥰")
             }
             text.contains("what is your name") || text.contains("your name") || text.contains("who are you") ||
             text.contains("naam kya hai") || text == "name" -> {
-                CommandPattern.InstantResponse("I am J.A.R.V.I.S., your autonomous AI personal operating assistant, created by RTGYASH.")
+                CommandPattern.InstantResponse("Main hoon aapki Maya, aapki personal AI companion! Bataiye mere hero, aaj main aapke liye kya karoon? 💖✨")
             }
 
             // Close app / go home

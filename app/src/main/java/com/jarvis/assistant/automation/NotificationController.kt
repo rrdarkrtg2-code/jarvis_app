@@ -36,7 +36,7 @@ object NotificationController {
 
     fun summarizeNotifications(): String {
         if (!isConnected) {
-            return "Notification access is not enabled. Please enable Notification Access in Settings to allow J.A.R.V.I.S. to read notifications."
+            return "Notification access is not enabled. Please enable Notification Access in Settings to allow Maya to read notifications."
         }
 
         val notifications = synchronized(currentNotifications) {
