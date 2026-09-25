@@ -193,32 +193,44 @@ fun JarvisCoreOrb(
                 center = center
             )
 
-            // 5. Holographic Cyber-Anime Companion Heart & Star Core (Option A)
-            val heartScale = coreRadius * 0.038f * (if (state == OrbState.SPEAKING) 1.15f else 1.0f)
-            val heartPath = Path().apply {
-                val ox = center.x
-                val oy = center.y - (10f * heartScale)
-                moveTo(ox, oy + (5f * heartScale))
-                cubicTo(ox - (18f * heartScale), oy - (15f * heartScale), ox - (28f * heartScale), oy + (10f * heartScale), ox, oy + (28f * heartScale))
-                cubicTo(ox + (28f * heartScale), oy + (10f * heartScale), ox + (18f * heartScale), oy - (15f * heartScale), ox, oy + (5f * heartScale))
-                close()
-            }
+            // 5. Nova AI Holographic Cyber Core (Electric Cyan & Neon Mint Waves - NO PINK HEART)
+            val coreScale = if (state == OrbState.SPEAKING || state == OrbState.LISTENING) {
+                1.0f + (audioLevel.coerceIn(0f, 10f) / 18f)
+            } else pulse
 
-            drawPath(
-                path = heartPath,
-                brush = Brush.radialGradient(
-                    colors = listOf(Color.White, Color(0xFFFF2A85), Color(0xFFBD00FF)),
-                    center = center,
-                    radius = coreRadius * 0.8f
-                )
-            )
-
-            // Sparkling glowing center pulse
             drawCircle(
-                color = Color.White.copy(alpha = 0.9f),
-                radius = 4.dp.toPx() * pulse,
+                brush = Brush.radialGradient(
+                    colors = listOf(Color(0xFF00F0FF), Color(0xFF00FFA3).copy(alpha = 0.5f), Color.Transparent),
+                    center = center,
+                    radius = coreRadius * 0.95f * coreScale
+                ),
+                radius = coreRadius * 0.95f * coreScale,
                 center = center
             )
+
+            rotate(rotationFast * 1.2f, center) {
+                val polyRadius = coreRadius * 0.65f * coreScale
+                val polyPath = Path()
+                for (k in 0 until 8) {
+                    val a = Math.toRadians(k * 45.0)
+                    val px = center.x + (polyRadius * kotlin.math.cos(a)).toFloat()
+                    val py = center.y + (polyRadius * kotlin.math.sin(a)).toFloat()
+                    if (k == 0) polyPath.moveTo(px, py) else polyPath.lineTo(px, py)
+                }
+                polyPath.close()
+
+                drawPath(
+                    path = polyPath,
+                    color = Color(0xFF00F0FF),
+                    style = Stroke(width = 2.5.dp.toPx(), cap = StrokeCap.Round)
+                )
+
+                drawCircle(
+                    color = Color.White,
+                    radius = 5.dp.toPx() * pulse,
+                    center = center
+                )
+            }
         }
     }
 }

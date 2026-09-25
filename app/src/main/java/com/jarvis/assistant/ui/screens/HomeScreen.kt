@@ -124,7 +124,7 @@ fun HomeScreen(
                             .background(JarvisSuccess)
                     )
                     Spacer(modifier = Modifier.width(6.dp))
-                    Text("MY BOSS & HERO 💖", color = JarvisCyan, fontSize = 11.sp, fontWeight = FontWeight.Bold, letterSpacing = 1.sp)
+                    Text("MAYA AI SYSTEM", color = JarvisCyan, fontSize = 11.sp, fontWeight = FontWeight.Bold, letterSpacing = 1.sp)
                 }
             }
 
@@ -165,15 +165,12 @@ fun HomeScreen(
 
         Spacer(modifier = Modifier.height(14.dp))
 
-        // 2. HUD TELEMETRY PILLS (Sleek horizontal row instead of bulky boxes)
+        // 2. HUD TELEMETRY PILLS (Clean Single Status)
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceEvenly
+            horizontalArrangement = Arrangement.Center
         ) {
-            HudPill(label = "STATUS", value = "ONLINE", valueColor = JarvisSuccess)
-            HudPill(label = "BATTERY", value = batteryText, valueColor = JarvisCyan)
-            HudPill(label = "TIME", value = timeFormat, valueColor = JarvisTextPrimary)
-            HudPill(label = "MODE", value = "ONLINE", valueColor = JarvisAmberBright)
+            HudPill(label = "MAYA SYSTEM", value = "ONLINE 🟢", valueColor = JarvisSuccess)
         }
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -279,7 +276,7 @@ fun HomeScreen(
                 ) {
                     JarvisCoreOrb(state = OrbState.IDLE, size = 220.dp)
                     Spacer(modifier = Modifier.height(14.dp))
-                    Text("MAYA AI • CUTE COMPANION 💖", color = JarvisCyan, fontWeight = FontWeight.Bold, fontSize = 14.sp, letterSpacing = 2.sp)
+                    Text("MAYA AI • NEURAL CORE", color = JarvisCyan, fontWeight = FontWeight.Bold, fontSize = 14.sp, letterSpacing = 2.sp)
                     Text("\"How may I assist you today, Boss?\"", color = JarvisTextSecondary, fontSize = 12.sp)
 
                     Spacer(modifier = Modifier.height(16.dp))
@@ -385,7 +382,7 @@ fun ActionDockButton(title: String, icon: ImageVector, onClick: () -> Unit) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Icon(icon, contentDescription = title, tint = JarvisCyan, modifier = Modifier.size(20.dp))
             Spacer(modifier = Modifier.height(4.dp))
-            Text(title, color = JarvisTextPrimary, fontSize = 10.sp, fontWeight = FontWeight.Bold)
+            Text(title, color = JarvisTextPrimary, fontSize = 9.sp, fontWeight = FontWeight.Bold)
         }
     }
 }

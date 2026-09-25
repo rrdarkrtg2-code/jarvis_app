@@ -2,31 +2,31 @@ package com.jarvis.assistant.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-val JarvisBackground = Color(0xFF090611)
-val JarvisSurface = Color(0xFF130D24)
-val JarvisSurfaceVariant = Color(0xFF1C1333)
-val JarvisCard = Color(0xFF150E28)
-val JarvisCardBorder = Color(0x40FF2A85)
+val JarvisBackground = Color(0xFF070A0F)
+val JarvisSurface = Color(0xFF0D121B)
+val JarvisSurfaceVariant = Color(0xFF131B27)
+val JarvisCard = Color(0xFF0E1622)
+val JarvisCardBorder = Color(0x3300F0FF)
 
-val JarvisCyan = Color(0xFFFF2A85) // Electric Neon Rose
-val JarvisCyanBright = Color(0xFFFF529A)
-val JarvisCyanGlow = Color(0x33FF2A85)
+val JarvisCyan = Color(0xFF00F0FF) // Electric Cyber Cyan
+val JarvisCyanBright = Color(0xFF38F9D7)
+val JarvisCyanGlow = Color(0x3300F0FF)
 
-val JarvisBlue = Color(0xFFBD00FF) // Electric Violet
-val JarvisBlueDark = Color(0xFF7900B3)
+val JarvisBlue = Color(0xFF00E5FF)
+val JarvisBlueDark = Color(0xFF0288D1)
 
-val JarvisAmber = Color(0xFFFF7597)
-val JarvisAmberBright = Color(0xFFFFB3C6)
-val JarvisAmberGlow = Color(0x33FF7597)
+val JarvisAmber = Color(0xFF00FFA3) // Cyber Mint
+val JarvisAmberBright = Color(0xFF69F0AE)
+val JarvisAmberGlow = Color(0x3300FFA3)
 
-val JarvisPurple = Color(0xFFE040FB)
-val JarvisMagenta = Color(0xFFFF4081)
-val JarvisPurpleGlow = Color(0x33E040FB)
+val JarvisPurple = Color(0xFF00E5FF)
+val JarvisMagenta = Color(0xFF00F0FF)
+val JarvisPurpleGlow = Color(0x3300F0FF)
 
-val JarvisTextPrimary = Color(0xFFFFF0F5)
-val JarvisTextSecondary = Color(0xFFC4B5FD)
-val JarvisTextMuted = Color(0xFF8B7AA8)
+val JarvisTextPrimary = Color(0xFFF1F5F9)
+val JarvisTextSecondary = Color(0xFF94A3B8)
+val JarvisTextMuted = Color(0xFF64748B)
 
-val JarvisSuccess = Color(0xFF00E676)
-val JarvisWarning = Color(0xFFFFAB00)
-val JarvisError = Color(0xFFFF1744)
+val JarvisSuccess = Color(0xFF00FFA3)
+val JarvisWarning = Color(0xFFFFB300)
+val JarvisError = Color(0xFFFF3366)
