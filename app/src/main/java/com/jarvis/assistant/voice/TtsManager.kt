@@ -123,20 +123,17 @@ class TtsManager(
         lastSpokenText = cleanText
         stop()
 
-        scope.launch {
-            // 1. Try ElevenLabs (Expressive Multilingual Indian/Hindi Female Voice)
+                scope.launch {
             if (elevenLabsApiKey.isNotBlank()) {
                 val ok = speakWithElevenLabs(cleanText)
                 if (ok) return@launch
             }
-
-            // 2. Try Fish Audio as backup
+            val okGoogle = speakWithGoogleCloudTts(cleanText)
+            if (okGoogle) return@launch
             if (fishAudioApiKey.isNotBlank()) {
-                val ok = speakWithFishAudio(cleanText)
-                if (ok) return@launch
+                val okFish = speakWithFishAudio(cleanText)
+                if (okFish) return@launch
             }
-
-            // 3. Fallback to on-device high quality female TTS
             speakWithLocalTts(cleanText, speechRate, pitch)
         }
     }
@@ -179,6 +176,22 @@ class TtsManager(
         } catch (e: Exception) {
             false
         }
+    }
+
+        private suspend fun speakWithGoogleCloudTts(text: String): Boolean = withContext(Dispatchers.IO) {
+        try {
+            val encoded = java.net.URLEncoder.encode(text, "UTF-8")
+            val url = "https://translate.google.com/translate_tts?ie=UTF-8&tl=hi&client=tw-ob&q=$encoded"
+            val request = Request.Builder().url(url).header("User-Agent", "Mozilla/5.0").build()
+            val response = httpClient.newCall(request).execute()
+            if (!response.isSuccessful || response.body == null) return@withContext false
+            val tempAudioFile = File(context.cacheDir, "maya_google_tts.mp3")
+            response.body!!.byteStream().use { input ->
+                FileOutputStream(tempAudioFile).use { output -> input.copyTo(output) }
+            }
+            withContext(Dispatchers.Main) { playAudioFile(tempAudioFile) }
+            true
+        } catch (e: Exception) { false }
     }
 
     private suspend fun speakWithFishAudio(text: String): Boolean = withContext(Dispatchers.IO) {
