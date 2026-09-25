@@ -133,13 +133,26 @@ class DeviceController(private val context: Context) {
             val cleanTitle = title.replace(Regex("[^a-zA-Z0-9_]"), "_").ifEmpty { "index" }
             val file = File(root, "$cleanTitle.html")
             file.writeText(htmlContent)
-            val webIntent = Intent(Intent.ACTION_VIEW).apply {
-                setDataAndType(Uri.fromFile(file), "text/html")
-                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            }
             try {
+                val uri = androidx.core.content.FileProvider.getUriForFile(
+                    context,
+                    "${context.packageName}.fileprovider",
+                    file
+                )
+                val webIntent = Intent(Intent.ACTION_VIEW).apply {
+                    setDataAndType(uri, "text/html")
+                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                }
                 context.startActivity(webIntent)
-            } catch (ignored: Exception) {}
+            } catch (e: Exception) {
+                try {
+                    val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse("file://${file.absolutePath}")).apply {
+                        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    }
+                    context.startActivity(browserIntent)
+                } catch (ignored: Exception) {}
+            }
             "Website '$title' generated successfully and saved to Downloads, Sir! 🌐✨"
         } catch (e: Exception) {
             "Website '$title' generated, Sir! 🌐"

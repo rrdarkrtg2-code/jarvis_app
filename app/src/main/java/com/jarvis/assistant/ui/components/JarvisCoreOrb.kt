@@ -193,42 +193,32 @@ fun JarvisCoreOrb(
                 center = center
             )
 
-            // 5. Holographic Triangular / Diamond Quantum Lattice
-            rotate(rotationFast * 0.5f, center) {
-                val triRadius = coreRadius * 0.65f
-                val triPath = Path().apply {
-                    val p1X = center.x
-                    val p1Y = center.y - triRadius
-
-                    val p2X = center.x + triRadius * 0.866f
-                    val p2Y = center.y + triRadius * 0.5f
-
-                    val p3X = center.x - triRadius * 0.866f
-                    val p3Y = center.y + triRadius * 0.5f
-
-                    moveTo(p1X, p1Y)
-                    lineTo(p2X, p2Y)
-                    lineTo(p3X, p3Y)
-                    close()
-                }
-
-                drawPath(
-                    path = triPath,
-                    brush = Brush.linearGradient(
-                        colors = listOf(primaryColor, Color.White),
-                        start = Offset(center.x, center.y - triRadius),
-                        end = Offset(center.x, center.y + triRadius)
-                    ),
-                    style = Stroke(width = 3.dp.toPx(), cap = StrokeCap.Round)
-                )
-
-                // Glowing center singularity dot
-                drawCircle(
-                    color = Color.White,
-                    radius = 4.dp.toPx(),
-                    center = center
-                )
+            // 5. Holographic Cyber-Anime Companion Heart & Star Core (Option A)
+            val heartScale = coreRadius * 0.038f * (if (state == OrbState.SPEAKING) 1.15f else 1.0f)
+            val heartPath = Path().apply {
+                val ox = center.x
+                val oy = center.y - (10f * heartScale)
+                moveTo(ox, oy + (5f * heartScale))
+                cubicTo(ox - (18f * heartScale), oy - (15f * heartScale), ox - (28f * heartScale), oy + (10f * heartScale), ox, oy + (28f * heartScale))
+                cubicTo(ox + (28f * heartScale), oy + (10f * heartScale), ox + (18f * heartScale), oy - (15f * heartScale), ox, oy + (5f * heartScale))
+                close()
             }
+
+            drawPath(
+                path = heartPath,
+                brush = Brush.radialGradient(
+                    colors = listOf(Color.White, Color(0xFFFF2A85), Color(0xFFBD00FF)),
+                    center = center,
+                    radius = coreRadius * 0.8f
+                )
+            )
+
+            // Sparkling glowing center pulse
+            drawCircle(
+                color = Color.White.copy(alpha = 0.9f),
+                radius = 4.dp.toPx() * pulse,
+                center = center
+            )
         }
     }
 }

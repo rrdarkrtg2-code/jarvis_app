@@ -108,25 +108,36 @@ class TtsManager(
         } catch (ignored: Exception) {}
     }
 
+        private fun cleanTextForSpeech(raw: String): String {
+        return raw
+            .replace(Regex("\\*[^*]+\\*"), "")
+            .replace(Regex("[\\p{So}\\p{Cn}\\p{Cs}\\p{Co}]"), "")
+            .replace(Regex("[#*_`~]"), "")
+            .replace(Regex("\\s+"), " ")
+            .trim()
+    }
+
     fun speak(text: String, speechRate: Float = 1.0f, pitch: Float = 1.25f) {
-        lastSpokenText = text
+        val cleanText = cleanTextForSpeech(text)
+        if (cleanText.isBlank()) return
+        lastSpokenText = cleanText
         stop()
 
         scope.launch {
             // 1. Try ElevenLabs (Expressive Multilingual Indian/Hindi Female Voice)
             if (elevenLabsApiKey.isNotBlank()) {
-                val ok = speakWithElevenLabs(text)
+                val ok = speakWithElevenLabs(cleanText)
                 if (ok) return@launch
             }
 
             // 2. Try Fish Audio as backup
             if (fishAudioApiKey.isNotBlank()) {
-                val ok = speakWithFishAudio(text)
+                val ok = speakWithFishAudio(cleanText)
                 if (ok) return@launch
             }
 
             // 3. Fallback to on-device high quality female TTS
-            speakWithLocalTts(text, speechRate, pitch)
+            speakWithLocalTts(cleanText, speechRate, pitch)
         }
     }
 
