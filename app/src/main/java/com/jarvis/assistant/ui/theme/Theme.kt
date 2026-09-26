@@ -27,3 +27,8 @@ fun MayaTheme(content: @Composable () -> Unit) {
         content = content
     )
 }
+
+@Composable
+fun JARVISTheme(content: @Composable () -> Unit) {
+    MayaTheme(content = content)
+}
