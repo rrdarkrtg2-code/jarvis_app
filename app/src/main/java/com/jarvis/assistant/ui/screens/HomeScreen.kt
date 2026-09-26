@@ -43,6 +43,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.jarvis.assistant.JarvisApp
+import com.jarvis.assistant.ui.components.AnimeGirlCompanion
 import com.jarvis.assistant.ui.components.JarvisCoreOrb
 import com.jarvis.assistant.ui.theme.JarvisBackground
 import com.jarvis.assistant.ui.theme.JarvisCard
